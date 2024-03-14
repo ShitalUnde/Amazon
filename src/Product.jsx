@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import PropTypes from "prop-types";
 
 const Product = (props) => {
   //   const [productQty, setproductQty] = useState(props.product.qty);
@@ -14,36 +15,60 @@ const Product = (props) => {
       setproduct(temp);
     }
 
-    props.addItemToCart(temp);
+    handleCartItems(temp, operation);
   };
 
-  //   console.log(props.product);
+  const handleCartItems = (updatedProduct, operation) => {
+    if (operation === "add") {
+      if (props.cart.length <= 0) {
+        props.addItemToCart([{ ...updatedProduct }]);
+      } else {
+        const findIndex = props.cart.findIndex(
+          (element) => element.id === updatedProduct.id
+        );
+        console.log(findIndex);
+        if (findIndex <= -1) {
+          props.addItemToCart([...props.cart, { ...updatedProduct }]);
+        } else {
+          props.cart[findIndex] = { ...updatedProduct };
+          props.addItemToCart([...props.cart]);
+        }
+      }
+    }else{
+      const findIndex = props.cart.findIndex(
+        (element) => element.id === updatedProduct.id
+      );
+      if (findIndex > -1) {
+       if(updatedProduct.qty <= 0){
+        props.cart.splice(findIndex, 1);
+        props.addItemToCart([...props.cart]);
+       }else{
+        props.cart[findIndex] = {...updatedProduct}
+        props.addItemToCart([...props.cart]);
+       }
+      } 
+    }
+  };
+
+
+
   return (
-    //   <div className="col-md-6 col-lg-4 col-xl-3">
-    //     <center>
-    //       <h3>{product.title}</h3>
-    //       <p>
-    //       {product.description}
-
-    //       </p>
-    //       <p>
-    //         <button className="btn btn-success">Learn More &raquo;</button>
-    //       </p>
-    //     </center>
-    //   </div>
-
-    <div className="card" style={{ width: "18rem", margin: "3px" }}>
+   <div className="col-sm-4 col-md-3 col-lg-3 mb-3">
+     <div className="card">
+      <center>
+        <h6 className="p-2">{product.title}</h6>
+      </center>
       <img
         className="card-img-top"
         width="200"
-        height="150"
+        height="200"
         src={product.images[0]}
         alt="Card image cap"
       />
+
       <div className="card-body">
-        <p className="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
+        <p className="card-text" style={{ height: "150px" }}>
+          {product.description}
         </p>
 
         <div
@@ -84,7 +109,14 @@ const Product = (props) => {
         </div>
       </div>
     </div>
+   </div>
   );
 };
 
 export default Product;
+
+Product.propTypes = {
+  product: PropTypes.object.isRequired,
+  cart: PropTypes.array.isRequired,
+  addItemToCart: PropTypes.func.isRequired,
+};

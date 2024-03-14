@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import Product from "./Product";
+import PropTypes from "prop-types";
 
-const Products = () => {
+const Products = ({ setCartItem }) => {
   const [productList, setproductList] = useState(null);
-  let [cart, setCart] = useState(null);
-
-  const arr = []
+  let [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -14,8 +14,9 @@ const Products = () => {
         jsonData.products.forEach((element) => {
           element.qty = 0;
         });
+
         setproductList(jsonData.products);
-        console.log(jsonData.products);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -24,36 +25,41 @@ const Products = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {}, [cart]);
-
-  const setCartCount = (data) => {
-    // arr.push(data);
-//console.log(arr);
-  
-    if(cart !== null){
-        cart.forEach((el, index) => {
-            console.log(el, index)
-            if(el.id === data.id){
-                //update
-                console.log()
-
-            }else{
-                //push
-                arr.push(data)
-            }
-        })
-    }
-    setCart(arr);
-  };
+  useEffect(() => {
+    console.log(`cart...........`, cart);
+    setCartItem([...cart]);
+  }, [cart]);
 
   return (
     <>
-      {productList &&
+      {/* {productList &&
         productList.map((item, index) => (
-          <Product key={index} addItemToCart={setCartCount} product={item} />
-        ))}
+          <Product key={index} cart={cart} addItemToCart={setCart} product={item} />
+        ))} */}
+
+      {loading ? ( // Display progress loader if data is being fetched
+        <div className="progress-container">
+          <div className="progress-bar"></div>
+        </div>
+      ) : (
+        <div className="row mt-5">
+          {productList &&
+            productList.map((item, index) => (
+              <Product
+                key={index}
+                addItemToCart={setCart}
+                cart={cart}
+                product={item}
+              />
+            ))}
+        </div>
+      )}
     </>
   );
 };
 
 export default Products;
+
+Products.propTypes = {
+  setCartItem: PropTypes.func.isRequired,
+};
