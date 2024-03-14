@@ -1,9 +1,14 @@
 import { useState } from "react";
 import Products from "./Products";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Button from "react-bootstrap/Button";
+import { Checkout } from "./Checkout";
 import "./assets/loader.css";
+import "./App.css"
 
 export default function App() {
   const [cartItem, setCartItem] = useState([]);
+  const [showCheckout, setShowCheckout] = useState(false);
 
   return (
     <>
@@ -13,15 +18,18 @@ export default function App() {
             Amazon
           </a>
           <button
-            type="button"
             className="navbar-toggler"
+            type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarCollapse"
+            aria-controls="navbarCollapse"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
           >
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarCollapse">
-            <div className="navbar-nav">
+            <div className="navbar-nav me-auto mb-2 mb-lg-0">
               <a href="#" className="nav-item nav-link active">
                 Home
               </a>
@@ -35,22 +43,31 @@ export default function App() {
                 Contact
               </a>
             </div>
-            <div className="navbar-nav ms-auto">
-              <button className="btn btn-primary">
+            <div className="navbar-nav">
+              <Button
+                variant="primary"
+                onClick={() => setShowCheckout(true)}
+              >
                 <i className="fas fa-shopping-cart">
                   <span style={{ paddingLeft: "5px" }}>{cartItem.length}</span>
                 </i>
-              </button>
+              </Button>
             </div>
           </div>
         </div>
       </nav>
-      <>
-        <div className="row m-3">
-          <Products setCartItem={setCartItem} />
+      <div className="container mt-5">
+        <div className="row">
+          <div className="col">
+            <Products setCartItem={setCartItem} />
+          </div>
         </div>
-        <hr />
-      </>
+      </div>
+      <Checkout
+        cartItem={cartItem}
+        useModalEffect={setShowCheckout}
+        show={showCheckout}
+      />
     </>
   );
 }

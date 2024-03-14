@@ -50,6 +50,7 @@ const Products = ({ setCartItem }) => {
                 addItemToCart={setCart}
                 cart={cart}
                 product={item}
+                parentIndex={index}
               />
             ))}
         </div>
