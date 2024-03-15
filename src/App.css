@@ -46,3 +46,21 @@
 .checked {
   color: orange;
 }
+
+.bg-secondary {
+  background-color: #e6e6e6 !important;
+}
+
+.dropdown-menu {
+  background: #e6e6e6;
+  border: none;
+}
+.navbar-light .navbar-nav .nav-link,
+.dropdown-item {
+  color: #4e4e4e;
+}
+
+.navbar-light .navbar-nav .nav-link:hover,
+.dropdown-item:hover {
+  font-weight: bold;
+}

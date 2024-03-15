@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import Rating from "./assets/Rating";
+import Rating from "./Rating";
 import CarouselCustom from "./CarouselCustom";
 
 const Product = (props) => {
@@ -103,11 +103,9 @@ const Product = (props) => {
               </button>
             </div>
 
-            <div className="text-right">
+            <div className="text-right col-4">
               <p>
-                {product.qty > 0 && (
-                  <span>Price: {product.qty * product.price}</span>
-                )}
+              <span>Price: {product.price}</span>
               </p>
             </div>
           </div>
